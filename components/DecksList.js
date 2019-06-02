@@ -24,7 +24,7 @@ const DeckLabel = styled.Text`
   padding: 5px;
 `;
 
-const DeckQuestions = styled.Text`
+const DeckCards = styled.Text`
   color: #888;
   font-size: 18;
   margin: 10px 15px 10px 0;
@@ -58,7 +58,7 @@ class DecksList extends Component {
         style={{ borderTopWidth: index === 0 ? 1 : 0 }}
       >
         <DeckLabel>{item.title}</DeckLabel>
-        <DeckQuestions>{item.cards.length}</DeckQuestions>
+        <DeckCards>{item.cards.length}</DeckCards>
       </DeckItemContainer>
     )
   }

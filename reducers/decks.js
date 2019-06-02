@@ -11,7 +11,10 @@ export default function decks(state = {}, action) {
         },
       };
     case REMOVE_DECK:
-      return state;
+      const newState = { ...state };
+      delete newState[action.id];
+
+      return newState;
     case ADD_CARD:
       return {
         ...state,

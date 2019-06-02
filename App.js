@@ -3,6 +3,7 @@ import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import reducer from './reducers'
 import { createAppContainer, createStackNavigator , createBottomTabNavigator } from 'react-navigation'
+import AddCard from './components/AddCard';
 import AddDeck from './components/AddDeck';
 import Deck from './components/Deck';
 import DecksList from './components/DecksList';
@@ -13,6 +14,12 @@ const AppNavigator = createStackNavigator({
     screen: DecksList,
     navigationOptions: () => ({
       title: 'Decks',
+    }),
+  },
+  AddCard: {
+    screen: AddCard,
+    navigationOptions: () => ({
+      title: 'Add new card',
     }),
   },
   AddDeck: {

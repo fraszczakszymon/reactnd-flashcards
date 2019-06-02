@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, View } from 'react-native';
 import styled from 'styled-components';
-import { addDeck } from '../actions/decks';
+import { addCard } from '../actions/decks';
 
 const InputContainer = styled.View`
   background-color: #fffeff;
@@ -29,7 +29,7 @@ const Input = styled.TextInput`
   padding: 5px;
 `;
 
-class AddDeck extends Component {
+class AddCard extends Component {
   static navigationOptions = ({ navigation }) => {
     const {params = {}} = navigation.state;
 
@@ -44,7 +44,8 @@ class AddDeck extends Component {
   }
 
   state = {
-    title: '',
+    answer: '',
+    question: '',
   }
 
   componentDidMount() {
@@ -55,16 +56,16 @@ class AddDeck extends Component {
 
   handleAdd() {
     const { add, navigation } = this.props;
-    const { title } = this.state;
+    const { answer, question } = this.state;
+    const id = navigation.getParam('id');
 
-    if (!title) {
-      alert('Deck title is required.');
+    if (!question) {
+      alert('Card question is required.');
+    } else if (!answer) {
+      alert('Card answer is required.');
     } else {
-      add(title)
-        .then((action) => {
-          navigation.goBack();
-          navigation.navigate('Deck', { id: action.id });
-        });
+      add(id, question, answer);
+      navigation.goBack();
     }
   }
 
@@ -72,10 +73,18 @@ class AddDeck extends Component {
     return (
       <View style={{ backgroundColor: '#f1eff2', flex: 1 }}>
         <InputContainer>
-          <Label>Title</Label>
+          <Label>Question</Label>
           <Input
-            onChangeText={(text) => this.setState({title: text})}
-            value={this.state.title}
+            onChangeText={(question) => this.setState({question})}
+            value={this.state.question}
+            placeholder="Required"
+          />
+        </InputContainer>
+        <InputContainer style={{ borderTopWidth: 0, marginTop: 0 }}>
+          <Label>Answer</Label>
+          <Input
+            onChangeText={(answer) => this.setState({answer})}
+            value={this.state.answer}
             placeholder="Required"
           />
         </InputContainer>
@@ -86,8 +95,8 @@ class AddDeck extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    add: (title) => dispatch(addDeck(title)),
+    add: (id, question, answer) => dispatch(addCard(id, question, answer)),
   }
 }
 
-export default connect(null, mapDispatchToProps)(AddDeck);
+export default connect(null, mapDispatchToProps)(AddCard);

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Text, View } from 'react-native';
+import { Button, View } from 'react-native';
 import styled from 'styled-components';
+import { removeDeck } from '../actions/decks'
 
 const Title = styled.Text`
   font-size: 20;
@@ -20,11 +21,25 @@ const BlueButton = styled.TouchableOpacity`
   background: #0077f8;
   border-radius: 4px;
   margin: 0 20px;
-  padding: 20px;
+  padding: 15px;
 `;
 
-const ButtonText = styled.Text`
+const BlueButtonText = styled.Text`
   color: #fff;
+  text-align: center;
+  font-size: 18;
+`;
+
+const RedButton = styled.TouchableOpacity`
+  border-color: #f8272e;
+  border-radius: 4px;
+  border-width: 1px;
+  margin: 0 20px;
+  padding: 15px;
+`;
+
+const RedButtonText = styled.Text`
+  color: #f8272e;
   text-align: center;
   font-size: 18;
 `;
@@ -35,19 +50,24 @@ class DecksList extends Component {
 
     return {
       headerRight: (
-        <Button title="Add question" onPress={() => params.navigateToAddQuestion()} />
+        <Button title="Add card" onPress={() => params.navigateToAddCard()} />
       )
     }
   }
 
   componentDidMount() {
-    const { deck, navigation } = this.props;
+    const { id, navigation } = this.props;
 
     navigation.setParams({
-      navigateToAddQuestion: () => navigation.navigate('AddQuestion', {
-        id: deck.id,
-      }),
+      navigateToAddCard: () => navigation.navigate('AddCard', { id }),
     });
+  }
+
+  removeDeck() {
+    const { id, dispatch, navigation } = this.props;
+
+    dispatch(removeDeck(id));
+    navigation.goBack();
   }
 
   startQuiz = () => {
@@ -61,13 +81,26 @@ class DecksList extends Component {
   render() {
     const { deck } = this.props;
 
+    if (!deck) {
+      return (
+        <View style={{ backgroundColor: '#f1eff2', flex: 1 }}></View>
+      )
+    }
+
     return (
       <View style={{ backgroundColor: '#f1eff2', flex: 1 }}>
         <Title>{deck.title}</Title>
-        <Description>{deck.cards.length} {deck.cards.length === 1 ? 'question' : 'questions'}</Description>
-        <BlueButton onPress={this.startQuiz}>
-          <ButtonText>Start a quiz</ButtonText>
+        <Description>{deck.cards.length} {deck.cards.length === 1 ? 'card' : 'cards'}</Description>
+        <BlueButton
+          onPress={this.startQuiz}
+          disabled={!deck.cards.length}
+          style={{ opacity: deck.cards.length ? 1 : 0.5 }}
+        >
+          <BlueButtonText>Start a quiz</BlueButtonText>
         </BlueButton>
+        <RedButton onPress={() => this.removeDeck()} style={{ marginTop: 10 }}>
+          <RedButtonText>Remove deck</RedButtonText>
+        </RedButton>
       </View>
     );
   }
@@ -78,6 +111,7 @@ function mapStateToProps({ decks }, { navigation }) {
 
   return {
     deck: decks[id],
+    id,
   }
 
 }
