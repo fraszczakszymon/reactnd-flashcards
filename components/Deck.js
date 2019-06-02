@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, View } from 'react-native';
+import { Alert, Button, View } from 'react-native';
 import styled from 'styled-components';
 import { removeDeck } from '../actions/decks'
 
@@ -31,7 +31,7 @@ const BlueButtonText = styled.Text`
 `;
 
 const RedButton = styled.TouchableOpacity`
-  border-color: #f8272e;
+  border-color: #ff3824;
   border-radius: 4px;
   border-width: 1px;
   margin: 0 20px;
@@ -39,7 +39,7 @@ const RedButton = styled.TouchableOpacity`
 `;
 
 const RedButtonText = styled.Text`
-  color: #f8272e;
+  color: #ff3824;
   text-align: center;
   font-size: 18;
 `;
@@ -66,8 +66,25 @@ class DecksList extends Component {
   removeDeck() {
     const { id, dispatch, navigation } = this.props;
 
-    dispatch(removeDeck(id));
-    navigation.goBack();
+    Alert.alert(
+      'Remove deck',
+      'Are you sure you want to remove this deck?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Remove',
+          onPress: () => {
+            dispatch(removeDeck(id));
+            navigation.goBack();
+          },
+          style: 'destructive',
+        },
+      ],
+      {cancelable: false},
+    );
   }
 
   startQuiz = () => {
