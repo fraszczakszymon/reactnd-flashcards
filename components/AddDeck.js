@@ -1,49 +1,91 @@
 import React, { Component } from 'react';
-import { FlatList, TouchableOpacity, View, Text, TextInput } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { connect } from 'react-redux';
+import { Button, View } from 'react-native';
 import styled from 'styled-components';
+import { addDeck } from '../actions/decks';
 
-const Input = styled.TextInput`
-  border-color: #888;
+const InputContainer = styled.View`
+  background-color: #fffeff;
+  border-color: #ebe7eb;
   border-bottom-width: 1px;
   border-style: solid;
-  padding: 10px;
-  margin: 10px 20px;
+  border-top-width: 1px;
+  flex-direction: row;
+  margin-top: 25px;
 `;
 
-const Button = styled.TouchableOpacity`
-  background: #007aff;
-  border-radius: 4px;
-  color: #fff;
-  padding: 10px;
-  text-align: center;
-  width: 150px;
+const Label = styled.Text`
+  font-size: 18;
+  font-weight: 500;
+  margin: 10px 25px 10px 15px;
+  padding: 5px;
+`;
+
+const Input = styled.TextInput`
+  font-size: 18;
+  margin: 10px 15px;
+  padding: 5px;
 `;
 
 class AddDeck extends Component {
+  static navigationOptions = ({ navigation }) => {
+    const {params = {}} = navigation.state;
+
+    return {
+      headerLeft: (
+        <Button title="Cancel" onPress={() => navigation.goBack()} />
+      ),
+      headerRight: (
+        <Button title="Save" onPress={() => params.handleAdd()} />
+      ),
+    }
+  }
+
   state = {
-    question: '',
-    answer: '',
+    title: '',
+  }
+
+  componentDidMount() {
+    this.props.navigation.setParams({
+      handleAdd: () => this.handleAdd()
+    });
+  }
+
+  handleAdd() {
+    const { add, navigation } = this.props;
+    const { title } = this.state;
+
+    if (!title) {
+      alert('Deck title is required.');
+    } else {
+      add(title)
+        .then((action) => {
+          navigation.goBack();
+          navigation.navigate('Deck', { id: action.id });
+        });
+    }
   }
 
   render() {
     return (
-      <View>
-        <Input
-          onChangeText={(text) => this.setState({question: text})}
-          value={this.state.question}
-          placeholder="Deck name"
-        />
-        <View>
-          <Button>
-            <Text style={{ color: '#fff', textAlign: 'center' }}>
-              Add new deck
-            </Text>
-          </Button>
-        </View>
+      <View style={{ backgroundColor: '#f1eff2', flex: 1 }}>
+        <InputContainer>
+          <Label>Title</Label>
+          <Input
+            onChangeText={(text) => this.setState({title: text})}
+            value={this.state.title}
+            placeholder="Required"
+          />
+        </InputContainer>
       </View>
     );
   }
 }
 
-export default AddDeck
+function mapDispatchToProps(dispatch) {
+  return {
+    add: (title) => dispatch(addDeck(title)),
+  }
+}
+
+export default connect(null, mapDispatchToProps)(AddDeck);
