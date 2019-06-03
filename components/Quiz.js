@@ -61,6 +61,19 @@ const RedButtonText = styled.Text`
   font-size: 18;
 `;
 
+const BlueButton = styled.TouchableOpacity`
+  background: #0077f8;
+  border-radius: 4px;
+  margin: 80px 20px 0 20px;
+  padding: 15px;
+`;
+
+const BlueButtonText = styled.Text`
+  color: #fff;
+  text-align: center;
+  font-size: 18;
+`;
+
 const Score = styled.Text`
   font-size: 80;
   font-weight: 700;
@@ -84,7 +97,16 @@ class Quiz extends Component {
   onAnswer(score) {
     this.setState(() => ({
       correct: this.state.correct + score,
+      showAnswer: false,
       question: this.state.question + 1,
+    }));
+  }
+
+  onRestart() {
+    this.setState(() => ({
+      correct: 0,
+      showAnswer: false,
+      question: 1,
     }));
   }
 
@@ -110,6 +132,9 @@ class Quiz extends Component {
         <View style={{ backgroundColor: '#f1eff2', flex: 1 }}>
           <Score>{Math.round(100 * correct / numberOfCards)}%</Score>
           <ScoreDescription>Your score</ScoreDescription>
+          <BlueButton onPress={() => this.onRestart()}>
+            <BlueButtonText>Restart a quiz</BlueButtonText>
+          </BlueButton>
         </View>
       );
     }
