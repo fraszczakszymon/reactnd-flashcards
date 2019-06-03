@@ -7,6 +7,7 @@ import AddCard from './components/AddCard';
 import AddDeck from './components/AddDeck';
 import Deck from './components/Deck';
 import DecksList from './components/DecksList';
+import Quiz from './components/Quiz';
 import middleware from './middleware';
 
 const AppNavigator = createStackNavigator({
@@ -30,6 +31,12 @@ const AppNavigator = createStackNavigator({
   },
   Deck: {
     screen: Deck,
+  },
+  Quiz: {
+    screen: Quiz,
+    navigationOptions: () => ({
+      title: 'Quiz',
+    }),
   },
 });
 

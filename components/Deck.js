@@ -12,6 +12,7 @@ const Title = styled.Text`
 `;
 
 const Description = styled.Text`
+  color: #888;
   font-size: 16;
   margin: 10px 0 60px 0;
   text-align: center;
@@ -88,11 +89,9 @@ class DecksList extends Component {
   }
 
   startQuiz = () => {
-    const { deck, navigation } = this.props;
+    const { id, navigation } = this.props;
 
-    navigation.navigate('Quiz', {
-      id: deck.id,
-    });
+    navigation.navigate('Quiz', { id });
   }
 
   render() {
@@ -130,7 +129,6 @@ function mapStateToProps({ decks }, { navigation }) {
     deck: decks[id],
     id,
   }
-
 }
 
 export default connect(mapStateToProps)(DecksList)
