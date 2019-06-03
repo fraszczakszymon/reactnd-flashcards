@@ -9,6 +9,7 @@ import Deck from './components/Deck';
 import DecksList from './components/DecksList';
 import Quiz from './components/Quiz';
 import middleware from './middleware';
+import { setLocalNotification } from './utils/helpers';
 
 const AppNavigator = createStackNavigator({
   Decks: {
@@ -43,7 +44,9 @@ const AppNavigator = createStackNavigator({
 const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends Component {
-  compons
+  componentDidMount() {
+    setLocalNotification();
+  }
 
   render() {
     return (

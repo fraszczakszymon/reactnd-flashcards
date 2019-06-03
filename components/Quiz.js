@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
 import styled from 'styled-components';
+import { clearLocalNotification, setLocalNotification } from '../utils/helpers';
 
 const Status = styled.Text`
   font-size: 16;
@@ -128,6 +129,8 @@ class Quiz extends Component {
     }
 
     if (question > numberOfCards) {
+      clearLocalNotification().then(setLocalNotification)
+
       return (
         <View style={{ backgroundColor: '#f1eff2', flex: 1 }}>
           <Score>{Math.round(100 * correct / numberOfCards)}%</Score>

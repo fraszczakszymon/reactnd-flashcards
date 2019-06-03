@@ -1,7 +1,7 @@
 import { AsyncStorage } from 'react-native';
 import { ADD_CARD, ADD_DECK, REMOVE_DECK, FETCH_DECKS, retrieveDecks } from '../actions/decks';
 
-const storageKey = '@FlashCards:decks';
+const STORAGE_KEY = '@FlashCards:decks';
 
 const storege = (store) => (next) => (action) => {
   const result = next(action);
@@ -11,10 +11,10 @@ const storege = (store) => (next) => (action) => {
     case ADD_CARD:
     case ADD_DECK:
     case REMOVE_DECK:
-      return AsyncStorage.setItem(storageKey, JSON.stringify(decks))
+      return AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(decks))
         .then(() => result);
     case FETCH_DECKS:
-      return AsyncStorage.getItem(storageKey)
+      return AsyncStorage.getItem(STORAGE_KEY)
         .then((result) => JSON.parse(result))
         .then((decks) => store.dispatch(retrieveDecks(decks)));
     default:
